@@ -1,0 +1,15 @@
+# top-most editorconfig file
+root = true
+
+[*]
+# unix-style newlines with a newline ending every file
+end_of_line = lf
+insert_final_newline = true
+# set default charset for every file
+charset = utf-8
+
+# matches multiple files with brace expansion notation
+[*.{js,tsx,ts, jsx}]
+# 2 tab indentation
+indent_style = tab
+indent_size = 2
