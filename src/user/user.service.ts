@@ -25,11 +25,11 @@ const mockUsers: User[] = [
 
 @Injectable()
 export class UserService {
-	getUsers() {
+	async getUsers() {
 		return mockUsers;
 	}
 
-	getUser(id: string): User {
+	async getUser(id: string) {
 		return mockUsers.find((user: User) => user.id === id);
 	}
 }

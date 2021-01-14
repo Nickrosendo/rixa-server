@@ -26,4 +26,7 @@ export class Challenge {
 
 	@Field((type) => [Prize])
 	prizeItems: Prize[];
+	
+	@Field({ nullable: true })
+	title: string;
 }

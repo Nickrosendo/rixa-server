@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type User {
-  id: ID!
+  id: ID
   name: String!
   nickname: String!
   email: String!
@@ -32,9 +32,13 @@ type Challenge {
   totalPrize: Float!
   participants: [User!]!
   prizeItems: [Prize!]!
+  title: String
 }
 
 type Query {
-  users: User!
-  challenges: [Challenge!]!
+  users: [User!]!
+  user(id: String!): User!
+  getAllChallenges: [Challenge!]!
+  getChallengeById(id: String!): Challenge!
+  getChallengesByCreatorId(creatorId: String!): [Challenge!]!
 }
