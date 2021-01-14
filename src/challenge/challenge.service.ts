@@ -47,7 +47,7 @@ const mockChallenges: Challenge[] = [
 		totalPrize: 500,
 		participants: [mockUser],
 		prizeItems: [mockPrizeItem],
-		title: 'My first challenge'
+		title: 'My first challenge',
 	},
 	{
 		id: '2',
@@ -57,7 +57,7 @@ const mockChallenges: Challenge[] = [
 		totalPrize: 1000,
 		participants: [mockUser],
 		prizeItems: [mockPrizeItem2],
-		title: 'My second challenge'
+		title: 'My second challenge',
 	},
 	{
 		id: '3',
@@ -67,7 +67,17 @@ const mockChallenges: Challenge[] = [
 		totalPrize: 1000,
 		participants: [mockUser],
 		prizeItems: [mockPrizeItem2],
-		title: 'My third challenge'
+		title: 'My third challenge',
+	},
+	{
+		id: '4',
+		creator: mockUser2,
+		creationDate: new Date('2020-12-30'),
+		rank: Rank.Platinum,
+		totalPrize: 5,
+		participants: [mockUser],
+		prizeItems: [mockPrizeItem2],
+		title: 'My fourth challenge',
 	},
 ];
 
@@ -78,7 +88,9 @@ export class ChallengeService {
 	}
 
 	async getChallengesById(creatorId: string): Promise<Challenge[]> {
-		return mockChallenges.filter((challenge: Challenge) => challenge.creator.id === creatorId)
+		return mockChallenges.filter(
+			(challenge: Challenge) => challenge.creator.id === creatorId,
+		);
 	}
 
 	async getChallenge(id: string) {
