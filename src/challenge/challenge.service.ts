@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Challenge, PrizeItem, User } from 'src/helpers/interfaces';
-import { Rank } from 'src/helpers/enums';
+
+import { Challenge, PrizeItem, User } from '@root/helpers/interfaces';
+import { Rank } from '@root/helpers/enums';
 
 const mockUser: User = {
 	id: '2',

@@ -4,7 +4,7 @@ import {
 	NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 
-import { AppModule } from 'src/app.module';
+import { AppModule } from '@root/app.module';
 
 const port = process.env.PORT || 3001;
 async function bootstrap() {

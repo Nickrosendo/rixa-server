@@ -1,8 +1,8 @@
 import { Field, ID, Float, ObjectType, Int } from '@nestjs/graphql';
 
-import { User } from 'src/user/models/user.model';
-import { Prize } from 'src/prize/models/prize.model';
-import { Rank } from 'src/helpers/enums';
+import { User } from '@root/user/models/user.model';
+import { Prize } from '@root/prize/models/prize.model';
+import { Rank } from '@root/helpers/enums';
 
 @ObjectType()
 export class Challenge {

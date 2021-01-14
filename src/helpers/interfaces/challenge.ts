@@ -1,5 +1,5 @@
-import { User, PrizeItem } from 'src/helpers/interfaces';
-import { Rank } from 'src/helpers/enums';
+import { User, PrizeItem } from '@root/helpers/interfaces';
+import { Rank } from '@root/helpers/enums';
 
 export interface Challenge {
 	id: string;

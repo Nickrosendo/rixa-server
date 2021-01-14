@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
+
+import { UserService } from '@root/user/user.service';
+
 import { ChallengeService } from './challenge.service';
-import { UserService } from 'src/user/user.service';
 import { ChallengeResolver } from './challenge.resolver';
 
 @Module({
