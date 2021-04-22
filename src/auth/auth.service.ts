@@ -7,6 +7,8 @@ import {
 
 import { AuthConfig } from './auth.config';
 
+const DEFAULT_PASSWORD = 'test1234568';
+
 @Injectable()
 export class AuthService {
 	private user_pool: CognitoUserPool;
@@ -42,6 +44,21 @@ export class AuthService {
 				},
 				onFailure: (error) => {
 					reject(error);
+				},
+				newPasswordRequired: (result) => {
+					console.log('newPasswordRequired result: ', result);
+					new_user.completeNewPasswordChallenge(
+						DEFAULT_PASSWORD,
+						{},
+						{
+							onSuccess: (newPasswordResult) => {
+								resolve(newPasswordResult);
+							},
+							onFailure: (error) => {
+								reject(error);
+							},
+						},
+					);
 				},
 			});
 		});
