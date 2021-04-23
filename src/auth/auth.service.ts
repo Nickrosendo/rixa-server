@@ -3,11 +3,16 @@ import {
 	AuthenticationDetails,
 	CognitoUser,
 	CognitoUserPool,
+	CognitoUserAttribute,
 } from 'amazon-cognito-identity-js';
 
 import { AuthConfig } from './auth.config';
 
-const DEFAULT_PASSWORD = 'test1234568';
+interface DefaultAuthUserData {
+	userName: string;
+	email: string;
+	password: string;
+}
 
 @Injectable()
 export class AuthService {
@@ -19,6 +24,28 @@ export class AuthService {
 		this.user_pool = new CognitoUserPool({
 			UserPoolId: this.auth_config.user_pool_id,
 			ClientId: this.auth_config.client_id,
+		});
+	}
+
+	sign_up({ userName, password, email }: DefaultAuthUserData) {
+		const userAttributes = [
+			new CognitoUserAttribute({ Name: 'email', Value: email }),
+		];
+
+		return new Promise((resolve, reject) => {
+			this.user_pool.signUp(
+				userName,
+				password,
+				userAttributes,
+				null,
+				(error, result) => {
+					if (error) {
+						return reject(error);
+					}
+
+					return resolve(result);
+				},
+			);
 		});
 	}
 
@@ -46,18 +73,10 @@ export class AuthService {
 					reject(error);
 				},
 				newPasswordRequired: (result) => {
-					console.log('newPasswordRequired result: ', result);
-					new_user.completeNewPasswordChallenge(
-						DEFAULT_PASSWORD,
-						{},
-						{
-							onSuccess: (newPasswordResult) => {
-								resolve(newPasswordResult);
-							},
-							onFailure: (error) => {
-								reject(error);
-							},
-						},
+					reject(
+						new Error(
+							`You received an email on ${result.email} to update your default password.`,
+						),
 					);
 				},
 			});
