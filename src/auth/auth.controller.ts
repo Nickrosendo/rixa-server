@@ -13,4 +13,13 @@ export class AuthController {
 			throw new BadRequestException(e.message);
 		}
 	}
+
+	@Post('sign_up')
+	async sign_up(@Body() authenticateRequest: { userName: string, email: string, password: string }) {
+		try {
+			return await this.authService.sign_up(authenticateRequest);
+		} catch(e) {
+			throw new BadRequestException(e.message);
+		}
+	}
 }
