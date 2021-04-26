@@ -27,7 +27,7 @@ export class AuthService {
 		});
 	}
 
-	sign_up({ userName, password, email }: DefaultAuthUserData) {
+	async sign_up({ userName, password, email }: DefaultAuthUserData) {
 		const userAttributes = [
 			new CognitoUserAttribute({ Name: 'email', Value: email }),
 		];
@@ -46,6 +46,27 @@ export class AuthService {
 					return resolve(result);
 				},
 			);
+		});
+	}
+
+	async verify_account(payload: {
+		userName: string;
+		email: string;
+		verified_token: string;
+	}) {
+		return new Promise((resolve, reject) => {
+			const user_data = {
+				Username: payload.userName,
+				Pool: this.user_pool,
+			};
+
+			const user = new CognitoUser(user_data);
+			user.confirmRegistration(payload.verified_token, true, (err, result) => {
+				if (err) {
+					return reject(err);
+				}
+				return resolve(result);
+			});
 		});
 	}
 

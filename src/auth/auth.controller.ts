@@ -15,10 +15,33 @@ export class AuthController {
 	}
 
 	@Post('sign_up')
-	async sign_up(@Body() authenticateRequest: { userName: string, email: string, password: string }) {
+	async sign_up(
+		@Body()
+		authenticateRequest: {
+			userName: string;
+			email: string;
+			password: string;
+		},
+	) {
 		try {
 			return await this.authService.sign_up(authenticateRequest);
-		} catch(e) {
+		} catch (e) {
+			throw new BadRequestException(e.message);
+		}
+	}
+
+	@Post('verify_account')
+	async verify_account(
+		@Body()
+		authenticateRequest: {
+			userName: string;
+			email: string;
+			verified_token: string;
+		},
+	) {
+		try {
+			return await this.authService.verify_account(authenticateRequest);
+		} catch (e) {
 			throw new BadRequestException(e.message);
 		}
 	}
