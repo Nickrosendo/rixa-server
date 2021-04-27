@@ -103,4 +103,51 @@ export class AuthService {
 			});
 		});
 	}
+
+	async forgot_password(payload: {
+		userName: string;
+		email: string;
+	}) {
+		return new Promise((resolve, reject) => {
+			const user_data = {
+				Username: payload.userName,
+				Pool: this.user_pool,
+			};
+
+			const user = new CognitoUser(user_data);
+			user.forgotPassword({
+				onFailure: (error) => {
+					reject(error);
+				},
+				onSuccess: (result) => {
+					resolve(result);
+				},
+			});
+		});
+	}
+
+	async change_password(payload: {
+		userName: string;
+		oldPassword: string;
+		newPassword: string;
+	}) {
+		return new Promise((resolve, reject) => {
+			const user_data = {
+				Username: payload.userName,
+				Pool: this.user_pool,
+			};
+
+			const user = new CognitoUser(user_data);
+			user.changePassword(
+				payload.oldPassword,
+				payload.newPassword,
+				(error, result) => {
+					if (error) {
+						return reject(error);
+					}
+					resolve(result);
+				},
+			);
+		});
+	}
 }
