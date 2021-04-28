@@ -30,7 +30,7 @@
     "apollo-server-fastify": "^2.19.1",
     "graphql": "^15.4.0",
     "graphql-tools": "^7.0.2",
-    "husky": "^6.0.0",
+    "husky": "^4.3.6",
     "lint-staged": "^10.5.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
