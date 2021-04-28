@@ -8,6 +8,7 @@ export class AuthController {
 	@Post('login')
 	async login(@Body() authenticateRequest: { name: string; password: string }) {
 		try {
+			console.log('debug log');
 			return await this.authService.authenticate_user(authenticateRequest);
 		} catch (e) {
 			throw new BadRequestException(e.message);
