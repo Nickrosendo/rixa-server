@@ -104,10 +104,7 @@ export class AuthService {
 		});
 	}
 
-	async forgot_password(payload: {
-		userName: string;
-		email: string;
-	}) {
+	async forgot_password(payload: { userName: string; email: string }) {
 		return new Promise((resolve, reject) => {
 			const user_data = {
 				Username: payload.userName,
