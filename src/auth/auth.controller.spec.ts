@@ -64,4 +64,20 @@ describe('AuthController', () => {
 			expect(response).toBe(mockResponse);
 		});
 	});
+
+	describe('verify_account endpoint', () => {
+		it('should return true when sucessfull verify_account', async () => {
+			const mockUser = {
+				userName: 'test_sign_up',
+				email: 'test@sign_up.com',
+				verified_token: 'token-test',
+			};
+			const mockResponse: any = true;
+			jest
+				.spyOn(service, 'verify_account')
+				.mockImplementation(() => Promise.resolve(mockResponse));
+			const response = await controller.verify_account(mockUser);
+			expect(response).toBe(mockResponse);
+		});
+	});
 });
