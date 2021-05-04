@@ -7,7 +7,7 @@ import { UserService } from './user.service';
 export class UserResolver {
 	constructor(private userService: UserService) {}
 
-	@Query((returns) => [User], { name: 'users' })
+	@Query((returns) => [User], { name: 'getAllUsers' })
 	async getAllUsers(): Promise<User[]> {
 		const users = await this.userService.getUsers();
 		if (!users) {
@@ -16,7 +16,7 @@ export class UserResolver {
 		return users;
 	}
 
-	@Query((returns) => User, { name: 'user' })
+	@Query((returns) => User, { name: 'getUser' })
 	async getUser(@Args('id') id: string): Promise<User> {
 		return this.userService.getUser(id);
 	}

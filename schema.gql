@@ -36,8 +36,8 @@ type Challenge {
 }
 
 type Query {
-  users: [User!]!
-  user(id: String!): User!
+  getAllUsers: [User!]!
+  getUser(id: String!): User!
   getAllChallenges: [Challenge!]!
   getChallengeById(id: String!): Challenge!
   getChallengesByCreatorId(creatorId: String!): [Challenge!]!
