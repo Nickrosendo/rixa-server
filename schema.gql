@@ -41,4 +41,5 @@ type Query {
   getAllChallenges: [Challenge!]!
   getChallengeById(id: String!): Challenge!
   getChallengesByCreatorId(creatorId: String!): [Challenge!]!
+  login(password: String!, name: String!): String!
 }

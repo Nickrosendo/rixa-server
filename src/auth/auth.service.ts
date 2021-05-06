@@ -70,7 +70,7 @@ export class AuthService {
 		});
 	}
 
-	authenticate_user(user: { name: string; password: string }) {
+	login(user: { name: string; password: string }) {
 		const { name, password } = user;
 
 		const authentication_details = new AuthenticationDetails({
@@ -88,7 +88,43 @@ export class AuthService {
 		return new Promise((resolve, reject) => {
 			return new_user.authenticateUser(authentication_details, {
 				onSuccess: (result) => {
-					resolve(result);
+					const jwtoken: string = result.getIdToken().getJwtToken();
+					resolve(jwtoken);
+				},
+				onFailure: (error) => {
+					reject(error);
+				},
+				newPasswordRequired: (result) => {
+					reject(
+						new Error(
+							`You received an email on ${result.email} to update your default password.`,
+						),
+					);
+				},
+			});
+		});
+	}
+
+	authenticate_user(user: { name: string; password: string }): Promise<string> {
+		const { name, password } = user;
+
+		const authentication_details = new AuthenticationDetails({
+			Username: name,
+			Password: password,
+		});
+
+		const user_data = {
+			Username: name,
+			Pool: this.user_pool,
+		};
+
+		const new_user = new CognitoUser(user_data);
+
+		return new Promise((resolve, reject) => {
+			return new_user.authenticateUser(authentication_details, {
+				onSuccess: (result) => {
+					const jwtoken: string = result.getIdToken().getJwtToken();
+					resolve(jwtoken);
 				},
 				onFailure: (error) => {
 					reject(error);
