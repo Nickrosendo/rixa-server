@@ -8,9 +8,7 @@ export class AuthController {
 	@Post('login')
 	async login(@Body() authenticateRequest: { name: string; password: string }) {
 		try {
-			const response = await this.authService.authenticate_user(
-				authenticateRequest,
-			);
+			const response = await this.authService.login(authenticateRequest);
 			return response;
 		} catch (e) {
 			throw new BadRequestException(e.message);

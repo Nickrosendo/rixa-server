@@ -42,7 +42,7 @@ describe('AuthController', () => {
 				clockDrift: 0,
 			};
 			jest
-				.spyOn(service, 'authenticate_user')
+				.spyOn(service, 'login')
 				.mockImplementation(() => Promise.resolve(mockResponse));
 			const response = await controller.login(mockUser);
 			expect(response).toBe(mockResponse);

@@ -27,7 +27,11 @@ export class AuthService {
 		});
 	}
 
-	async sign_up({ userName, password, email }: DefaultAuthUserData) {
+	async sign_up({
+		userName,
+		password,
+		email,
+	}: DefaultAuthUserData): Promise<boolean> {
 		const userAttributes = [
 			new CognitoUserAttribute({ Name: 'email', Value: email }),
 		];
@@ -38,12 +42,12 @@ export class AuthService {
 				password,
 				userAttributes,
 				null,
-				(error, result) => {
+				(error) => {
 					if (error) {
 						return reject(error);
 					}
 
-					return resolve(result);
+					return resolve(true);
 				},
 			);
 		});
@@ -53,7 +57,7 @@ export class AuthService {
 		userName: string;
 		email: string;
 		verified_token: string;
-	}) {
+	}): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			const user_data = {
 				Username: payload.userName,
@@ -61,51 +65,17 @@ export class AuthService {
 			};
 
 			const user = new CognitoUser(user_data);
-			user.confirmRegistration(payload.verified_token, true, (err, result) => {
+			user.confirmRegistration(payload.verified_token, true, (err) => {
 				if (err) {
 					return reject(err);
 				}
-				return resolve(result);
+
+				return resolve(true);
 			});
 		});
 	}
 
-	login(user: { name: string; password: string }) {
-		const { name, password } = user;
-
-		const authentication_details = new AuthenticationDetails({
-			Username: name,
-			Password: password,
-		});
-
-		const user_data = {
-			Username: name,
-			Pool: this.user_pool,
-		};
-
-		const new_user = new CognitoUser(user_data);
-
-		return new Promise((resolve, reject) => {
-			return new_user.authenticateUser(authentication_details, {
-				onSuccess: (result) => {
-					const jwtoken: string = result.getIdToken().getJwtToken();
-					resolve(jwtoken);
-				},
-				onFailure: (error) => {
-					reject(error);
-				},
-				newPasswordRequired: (result) => {
-					reject(
-						new Error(
-							`You received an email on ${result.email} to update your default password.`,
-						),
-					);
-				},
-			});
-		});
-	}
-
-	authenticate_user(user: { name: string; password: string }): Promise<string> {
+	login(user: { name: string; password: string }): Promise<string> {
 		const { name, password } = user;
 
 		const authentication_details = new AuthenticationDetails({

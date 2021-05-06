@@ -42,4 +42,6 @@ type Query {
   getChallengeById(id: String!): Challenge!
   getChallengesByCreatorId(creatorId: String!): [Challenge!]!
   login(password: String!, name: String!): String!
+  sign_up(password: String!, email: String!, userName: String!): Boolean!
+  verify_account(verified_token: String!, email: String!, userName: String!): Boolean!
 }
