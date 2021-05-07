@@ -52,4 +52,50 @@ export class AuthResolver {
 			throw new BadRequestException(e.message);
 		}
 	}
+
+	@Query((returns) => Boolean, { name: 'forgot_password' })
+	async forgot_password(
+		@Args('userName') userName: string,
+		@Args('email') email: string,
+	): Promise<boolean> {
+		try {
+			const payload = { userName, email };
+			const response: boolean = await this.authService.forgot_password(payload);
+			return response;
+		} catch (e) {
+			throw new BadRequestException(e.message);
+		}
+	}
+
+	@Query((returns) => Boolean, { name: 'confirm_password' })
+	async confirm_password(
+		@Args('confirmation_code') confirmation_code: string,
+		@Args('new_password') new_password: string,
+		@Args('user_name') user_name: string,
+	): Promise<boolean> {
+		try {
+			const payload = { confirmation_code, new_password, user_name };
+			const response: boolean = await this.authService.confirm_password(
+				payload,
+			);
+			return response;
+		} catch (e) {
+			throw new BadRequestException(e.message);
+		}
+	}
+
+	@Query((returns) => Boolean, { name: 'change_password' })
+	async change_password(
+		@Args('userName') userName: string,
+		@Args('oldPassword') oldPassword: string,
+		@Args('newPassword') newPassword: string,
+	): Promise<boolean> {
+		try {
+			const payload = { userName, oldPassword, newPassword };
+			const response: boolean = await this.authService.change_password(payload);
+			return response;
+		} catch (e) {
+			throw new BadRequestException(e.message);
+		}
+	}
 }

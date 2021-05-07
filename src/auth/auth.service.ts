@@ -110,7 +110,10 @@ export class AuthService {
 		});
 	}
 
-	async forgot_password(payload: { userName: string; email: string }) {
+	async forgot_password(payload: {
+		userName: string;
+		email: string;
+	}): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			const user_data = {
 				Username: payload.userName,
@@ -123,7 +126,30 @@ export class AuthService {
 					reject(error);
 				},
 				onSuccess: (result) => {
-					resolve(result);
+					resolve(true);
+				},
+			});
+		});
+	}
+
+	async confirm_password(payload: {
+		confirmation_code: string;
+		new_password: string;
+		user_name: string;
+	}): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			const user_data = {
+				Username: payload.user_name,
+				Pool: this.user_pool,
+			};
+
+			const user = new CognitoUser(user_data);
+			user.confirmPassword(payload.confirmation_code, payload.new_password, {
+				onFailure: (error) => {
+					reject(error);
+				},
+				onSuccess: () => {
+					resolve(true);
 				},
 			});
 		});
@@ -133,7 +159,7 @@ export class AuthService {
 		userName: string;
 		oldPassword: string;
 		newPassword: string;
-	}) {
+	}): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			const user_data = {
 				Username: payload.userName,
@@ -148,7 +174,7 @@ export class AuthService {
 					if (error) {
 						return reject(error);
 					}
-					resolve(result);
+					resolve(true);
 				},
 			);
 		});
