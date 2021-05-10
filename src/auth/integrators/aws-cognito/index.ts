@@ -1,4 +1,3 @@
-import { Inject } from '@nestjs/common';
 import {
 	AuthenticationDetails,
 	CognitoUser,
@@ -14,9 +13,11 @@ interface AuthenticationPayload {
 
 export class AWSCognito {
 	private user_pool: CognitoUserPool;
-	private readonly config: AWSCognitoConfig = new AWSCognitoConfig();
+	private readonly config: AWSCognitoConfig;
 
 	constructor() {
+		this.config = new AWSCognitoConfig();
+
 		this.user_pool = new CognitoUserPool({
 			UserPoolId: this.config.user_pool_id,
 			ClientId: this.config.client_id,
