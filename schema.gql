@@ -46,5 +46,5 @@ type Query {
   verify_account(verified_token: String!, email: String!, userName: String!): Boolean!
   forgot_password(email: String!, userName: String!): Boolean!
   confirm_password(user_name: String!, new_password: String!, confirmation_code: String!): Boolean!
-  change_password(newPassword: String!, oldPassword: String!, userName: String!): Boolean!
+  change_password(new_password: String!, old_password: String!, user_name: String!): Boolean!
 }

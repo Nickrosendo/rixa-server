@@ -61,20 +61,4 @@ export class AuthController {
 			throw new BadRequestException(e.message);
 		}
 	}
-
-	@Post('change_password')
-	async change_password(
-		@Body()
-		authenticateRequest: {
-			userName: string;
-			oldPassword: string;
-			newPassword: string;
-		},
-	) {
-		try {
-			return await this.authService.change_password(authenticateRequest);
-		} catch (e) {
-			throw new BadRequestException(e.message);
-		}
-	}
 }

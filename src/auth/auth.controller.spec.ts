@@ -95,20 +95,4 @@ describe('AuthController', () => {
 			expect(response).toBe(mockResponse);
 		});
 	});
-
-	describe('change_password endpoint', () => {
-		it('should return true when sucessfull change_password', async () => {
-			const mockUser = {
-				userName: 'test',
-				oldPassword: 'test',
-				newPassword: 'new_test',
-			};
-			const mockResponse: any = true;
-			jest
-				.spyOn(service, 'change_password')
-				.mockImplementation(() => Promise.resolve(mockResponse));
-			const response = await controller.change_password(mockUser);
-			expect(response).toBe(mockResponse);
-		});
-	});
 });

@@ -86,12 +86,12 @@ export class AuthResolver {
 
 	@Query((returns) => Boolean, { name: 'change_password' })
 	async change_password(
-		@Args('userName') userName: string,
-		@Args('oldPassword') oldPassword: string,
-		@Args('newPassword') newPassword: string,
+		@Args('user_name') user_name: string,
+		@Args('old_password') old_password: string,
+		@Args('new_password') new_password: string,
 	): Promise<boolean> {
 		try {
-			const payload = { userName, oldPassword, newPassword };
+			const payload = { user_name, old_password, new_password };
 			const response: boolean = await this.authService.change_password(payload);
 			return response;
 		} catch (e) {

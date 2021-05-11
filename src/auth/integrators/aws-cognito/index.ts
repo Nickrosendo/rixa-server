@@ -1,6 +1,7 @@
 import {
 	AuthenticationDetails,
 	CognitoUser,
+	CognitoUserAttribute,
 	CognitoUserPool,
 } from 'amazon-cognito-identity-js';
 
@@ -9,6 +10,36 @@ import { AWSCognitoConfig } from './config';
 interface AuthenticationPayload {
 	name: string;
 	password: string;
+	user?: CognitoUser;
+}
+
+interface SignUpPayload {
+	userName: string;
+	password: string;
+	email: string;
+}
+
+interface VerifyAccountPayload {
+	userName: string;
+	email: string;
+	verified_token: string;
+}
+
+interface ForgotPasswordPayload {
+	userName: string;
+	email: string;
+}
+
+interface ConfirmPasswordPayload {
+	confirmation_code: string;
+	new_password: string;
+	user_name: string;
+}
+
+interface ChangePasswordPayload {
+	user_name: string;
+	old_password: string;
+	new_password: string;
 }
 
 export class AWSCognito {
@@ -24,18 +55,18 @@ export class AWSCognito {
 		});
 	}
 
-	async authenticateUser(user: AuthenticationPayload): Promise<string> {
+	async authenticate_user(payload: AuthenticationPayload): Promise<string> {
 		const authentication_details = new AuthenticationDetails({
-			Username: user.name,
-			Password: user.password,
+			Username: payload.name,
+			Password: payload.password,
 		});
 
 		const user_data = {
-			Username: user.name,
+			Username: payload.name,
 			Pool: this.user_pool,
 		};
 
-		const new_user = new CognitoUser(user_data);
+		const new_user = payload.user ?? new CognitoUser(user_data);
 
 		return new Promise((resolve, reject) => {
 			return new_user.authenticateUser(authentication_details, {
@@ -54,6 +85,117 @@ export class AWSCognito {
 					);
 				},
 			});
+		});
+	}
+
+	async sign_up(newUser: SignUpPayload): Promise<boolean> {
+		const user_attributes = [
+			new CognitoUserAttribute({ Name: 'email', Value: newUser.email }),
+		];
+
+		return new Promise((resolve, reject) => {
+			this.user_pool.signUp(
+				newUser.userName,
+				newUser.password,
+				user_attributes,
+				null,
+				(error) => {
+					if (error) {
+						return reject(error);
+					}
+
+					return resolve(true);
+				},
+			);
+		});
+	}
+
+	async verify_account(payload: VerifyAccountPayload): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			const user_data = {
+				Username: payload.userName,
+				Pool: this.user_pool,
+			};
+
+			const user = new CognitoUser(user_data);
+			user.confirmRegistration(payload.verified_token, true, (err) => {
+				if (err) {
+					return reject(err);
+				}
+
+				return resolve(true);
+			});
+		});
+	}
+
+	async forgot_password(payload: ForgotPasswordPayload): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			const user_data = {
+				Username: payload.userName,
+				Pool: this.user_pool,
+			};
+
+			const user = new CognitoUser(user_data);
+			user.forgotPassword({
+				onFailure: (error) => {
+					reject(error);
+				},
+				onSuccess: () => {
+					resolve(true);
+				},
+			});
+		});
+	}
+
+	async confirm_password(payload: ConfirmPasswordPayload): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			const user_data = {
+				Username: payload.user_name,
+				Pool: this.user_pool,
+			};
+
+			const user = new CognitoUser(user_data);
+			user.confirmPassword(payload.confirmation_code, payload.new_password, {
+				onFailure: (error) => {
+					reject(error);
+				},
+				onSuccess: () => {
+					resolve(true);
+				},
+			});
+		});
+	}
+
+	async change_password(payload: ChangePasswordPayload): Promise<boolean> {
+		return new Promise(async (resolve, reject) => {
+			const user_data = {
+				Username: payload.user_name,
+				Pool: this.user_pool,
+			};
+
+			const user = new CognitoUser(user_data);
+
+			try {
+				await this.authenticate_user({
+					name: payload.user_name,
+					password: payload.old_password,
+					user,
+				});
+			} catch (ex) {
+				return reject(ex);
+			}
+
+			user.changePassword(
+				payload.old_password,
+				payload.new_password,
+				(error) => {
+					if (error) {
+						return reject(error);
+					}
+
+					resolve(true);
+				},
+			);
 		});
 	}
 }
